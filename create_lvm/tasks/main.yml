@@ -1,0 +1,34 @@
+---
+# tasks file for create_lvm.yml
+
+  - name: Create the VG
+    lvg:
+      pvs: "/dev/{{ raw_disks }}"
+      vg: '{{ vg_name }}'
+      state: present
+
+  - name: Creaate LVM
+    lvol:
+      vg: '{{ vg_name }}'
+      lv: '{{ lv_name }}'
+      size: 50m
+      force: yes
+
+  - name: Create a ext3 filesystem on /dev/vdb1
+    filesystem:
+      fstype: '{{ fs }}'
+      dev: '/dev/mapper/{{ vg_name }}-{{ lv_name }}'
+
+  - name: Create a directory to mount the filesystem.
+    file:
+      path: '{{ mount_point }}'
+      state: directory
+      mode: '0755'
+
+  - name: Mount the created fs filesystem.
+    mount:
+      path: '{{ mount_point }}'
+      src: '/dev/mapper/{{ vg_name }}-{{ lv_name }}'
+      fstype: '{{ fs }}'
+      opts: defaults
+      state: mounted

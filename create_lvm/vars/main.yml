@@ -1,0 +1,8 @@
+---
+# vars file for create_lvm.yml
+
+vg_name: firefly1
+lv_name: test
+mount_point: /mnt/mount_point
+fs: ext3
+raw_disks: vdb1

@@ -1,0 +1,7 @@
+---
+
+- hosts: web2
+  tasks:
+
+    - include_role:
+        name: create_lvm
